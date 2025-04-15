@@ -1,35 +1,41 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import AddClientForm from './components/AddClientForm';
+import ClientList from './components/ClientList';
+import IndustryFilter from './components/IndustryFilter';
 
+// Main App component that manages the client dashboard.
 function App() {
-  const [count, setCount] = useState(0)
+  // State to store the list of clients.
+  const [clients, setClients] = useState([]);
+
+  // State to store the selected industry filter.
+  const [industry, setIndustry] = useState('All');
+
+  // Function to add a new client to the list.
+  const addClient = (client) => {
+    setClients([...clients, client]); // Adds the new client to the existing list.
+  };
+
+  // Filters the clients based on the selected industry.
+  const filteredClients = industry === 'All'
+    ? clients // If "All" is selected, show all clients.
+    : clients.filter(c => c.industry === industry); // Otherwise, filter by industry.
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div>
+      {/* Header for the client dashboard */}
+      <h1>Client Dashboard</h1>
+
+      {/* Form to add a new client */}
+      <AddClientForm onAddClient={addClient} />
+
+      {/* Dropdown to filter clients by industry */}
+      <IndustryFilter setIndustry={setIndustry} />
+
+      {/* List of clients, filtered by the selected industry */}
+      <ClientList clients={filteredClients} />
+    </div>
+  );
 }
 
-export default App
+export default App;
